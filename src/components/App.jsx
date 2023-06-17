@@ -6,6 +6,7 @@ import { Container, MainTitle, Title } from 'components/App.styled';
 import ContactForm from 'components/ContactForm/ContactForm';
 import SearchFilter from 'components/SearchFIlter/SearchFIlter';
 import ContactList from 'components/ContactList/ContactList';
+import Notification from 'components/Notification/Notification';
 
 class App extends Component {
   state = {
@@ -59,34 +60,41 @@ class App extends Component {
     }));
   };
 
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   render() {
+    const { contacts } = this.state;
+
     return (
       <Container>
         <MainTitle>Phonebook</MainTitle>
         <ContactForm addContact={this.addContact} />
         <Title>Contacts</Title>
         <SearchFilter search={this.changedFilter} />
-        <ContactList
-          data={this.searchContact()}
-          deleteContact={this.deleteContact}
-        />
+        {contacts.length ? (
+          <ContactList
+            data={this.searchContact()}
+            deleteContact={this.deleteContact}
+          />
+        ) : (
+          <Notification message="There are no contacts in the phone book" />
+        )}
       </Container>
     );
   }
 }
 
 export default App;
-
-// Report.init({
-//   backgroundColor: '#e5eaf1',
-//   titleFontSize: '24px',
-//   messageFontSize: '18px',
-//   info: {
-//     svgColor: '#112236',
-//     titleColor: '#112236',
-//     messageColor: '#112236',
-//     buttonBackground: '#768696',
-//     buttonColor: '#112236',
-//     backOverlayColor: 'rgb(118, 134, 150, 0.8)',
-//   },
-// });
