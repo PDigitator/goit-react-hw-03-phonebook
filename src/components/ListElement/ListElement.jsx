@@ -12,7 +12,7 @@ const ListElement = ({ element: { id, name, number }, deleteContact }) => {
       <Paragraph>
         {name}:<Span>{number}</Span>
       </Paragraph>
-      <Btn onClick={() => deleteContact(id)}>Delete</Btn>
+      <Btn onClick={deleteContact}>Delete</Btn>
     </>
   );
 };

@@ -12,7 +12,10 @@ const ContactList = ({ data, deleteContact }) => {
         )
         .map(element => (
           <ListItem key={element.id}>
-            <ListElement element={element} deleteContact={deleteContact} />
+            <ListElement
+              element={element}
+              deleteContact={() => deleteContact(element.id)}
+            />
           </ListItem>
         ))}
     </List>
